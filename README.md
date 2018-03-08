@@ -31,14 +31,14 @@ To run this playbook to make sure it worked properly I did the following:
 * Made two virtual machines
   * `mkdir box1`
   * `cd box1`
-  * `vagrant init ubuntu/xenial64´
+  * `vagrant init ubuntu/xenial64`
   * added `config.vm.network "forwarded_port", guest: 80, host: 8081` to Vagrantfile under config.vm.box
   * `vagrant up`
-    * `vagrant ssh`
+  * `vagrant ssh`
     * added my ssh public key to vagrant user authorized_keys
     * `sudo apt-get install python`
     * `exit`
-  * vagrant ssh-config (To get ssh port number and put that in my ansible inventory file)
+  * `vagrant ssh-config` (To get ssh port number and put that in my ansible inventory file)
 
 After making the two boxes as above the playbook worked nicely.
 
