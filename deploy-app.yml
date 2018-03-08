@@ -3,7 +3,7 @@
 # playbook to deploy php web application
 #
 # Usage:
-# ansible -i production deploy-app.yml -e rel=v1
+# ansible-playbook -i production deploy-app.yml -e rel=v1
 
 - hosts: web
   roles:
