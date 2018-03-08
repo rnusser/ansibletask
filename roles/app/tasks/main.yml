@@ -1,0 +1,64 @@
+---
+
+- name: Create /var/www/app if it doesn't exist
+  become: yes
+  file:
+    path: /var/www/app
+    state: directory 
+    owner: www-data
+
+- name: Create /srv/app if it doesn't exist
+  become: yes
+  file:
+    path: /srv/app/{{ rel }}
+    state: directory 
+    owner: www-data
+
+- name: Create /etc/app if it doesn't exist
+  become: yes
+  file:
+    path: /etc/app
+    state: directory 
+
+- name: Configure nginx site
+  become: yes
+  template: 
+    src: nginx-app.j2
+    dest: /etc/nginx/sites-enabled/app
+
+- name: Deploy hello app
+  become: yes
+  git: 
+    repo: 'https://github.com/rnusser/hello-world.git'
+    dest: /srv/app/{{ rel }}
+    force: yes
+    version: "{{ rel }}"
+
+- name: Link latest to current release
+  become: yes
+  file: 
+    src: /srv/app/{{ rel }}/index.php
+    dest: /var/www/app/index.php
+    state: link
+
+- name: Deploy configuration.json
+  become: yes
+  template:
+    src: configuration.json.j2
+    dest: /etc/app/configuration.json
+
+- name: Create php file for cache clearing
+  become: yes
+  copy:
+    content: |
+             <?php
+             opcache_reset();
+             ?>
+    dest: /var/www/app/purgecache.php
+  tags: purgecache
+
+- name: Clear opcache
+  command: curl -s http://localhost/purgecache.php
+  tags: purgecache
+
+

@@ -1,0 +1,12 @@
+---
+
+# On Ubuntu 16.04 package php includes: 
+# php-common php7.0 php7.0-cli php7.0-common php7.0-fpm php7.0-json php7.0-opcache php7.0-readline
+
+- name: Install php7
+  become: true
+  package:
+    name: php
+    state: present
+  notify: restart nginx
+

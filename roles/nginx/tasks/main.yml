@@ -1,0 +1,28 @@
+---
+
+- name: Install nginx if not present (nginx-common nginx-core)
+  become: true
+  package: 
+    name: nginx
+    state: present
+
+- name: Disable the default nginx site config
+  become: yes
+  notify: restart nginx
+  file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: "absent"
+
+- name: Enable and start nginx service
+  become: true
+  service:
+    name: nginx
+    enabled: yes
+    state: started
+
+- name: Use our own nginx.conf
+  become: true
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify: restart nginx
+
+

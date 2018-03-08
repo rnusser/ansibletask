@@ -1,0 +1,5 @@
+---
+
+# dbserver: 192.168.100.10 # Not needed as it uses inventories DB server host info
+worker_connections: 7000
+
